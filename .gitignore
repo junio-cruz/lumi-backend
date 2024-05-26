@@ -1,0 +1,17 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+.pnpm-debug.log*
+
+# Coverage
+coverage/
+
+# Dependency directories
+node_modules/
+env
+.env
+*.env
+.env/*
+!/.env

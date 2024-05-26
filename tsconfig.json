@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "strictPropertyInitialization": false,
+    "resolveJsonModule": true,
+    "emitDecoratorMetadata": true,
+    "useUnknownInCatchVariables": false,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "target": "es2022",
+    "module": "commonjs",
+    "sourceMap": true,
+    "declaration": true,
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src"],
+  "exclude": ["dist", "coverage/*", "jest.config.ts", "**/node_modules/**", "**/__tests__/*"]
+}
