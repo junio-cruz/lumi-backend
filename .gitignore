@@ -15,3 +15,7 @@ env
 *.env
 .env/*
 !/.env
+
+# IDE directories
+.idea/*
+
