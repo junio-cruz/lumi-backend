@@ -28,11 +28,9 @@ export class SignInUseCase implements ISignInUseCase {
     this.logger.debug('execute input', JSON.stringify(input));
     const customer = await this.getCustomerRepository.execute({ customer_id: input.customer_id });
     this.logger.debug('customer repository response', customer);
-
     if (!customer) {
       throw new Error('CUSTOMER_NOT_FOUND');
     }
-
     this.logger.debug('execute output', customer);
     return customer;
   }

@@ -10,8 +10,8 @@ export class CreateCustomerRepository implements ICreateCustomerRepository {
     input: CreateCustomerRepositoryInput,
   ): Promise<CreateCustomerRepositoryOutput> {
     const customer_repository = prisma.use();
-    return await customer_repository.create({
+    return await customer_repository.customer.create({
       data: input,
-    });
+    }) as unknown as CreateCustomerRepositoryOutput;
   }
 }

@@ -10,8 +10,8 @@ export class CreateInvoiceRepository implements ICreateInvoiceRepository {
     input: CreateInvoiceRepositoryInput,
   ): Promise<CreateInvoiceRepositoryOutput> {
     const invoice_repository = prisma.use();
-    return await invoice_repository.create({
+    return await invoice_repository.invoice.create({
       data: input,
-    })
+    }) as CreateInvoiceRepositoryOutput;
   }
 }

@@ -15,7 +15,7 @@ export type ListInvoicesRepositoryInput = {
 
 export type ListInvoicesRepositoryOutput = {
   page: number;
-  page_data: Invoice [];
+  page_data: Invoice[];
   page_count: number;
   all_count: number;
   all_pages_count: number;

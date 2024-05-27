@@ -22,7 +22,7 @@ class PrismaConnection {
         { level: 'info', emit: 'event' },
         { level: 'error', emit: 'event' },
       ],
-      errorFormat: 'pretty',
+      errorFormat: 'minimal',
     });
   }
 

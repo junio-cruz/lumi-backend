@@ -3,7 +3,6 @@ export type Customer = {
   name: string;
   email: string;
   created_at: Date;
-  updated_at?: Date;
 };
 
 export const customerResolver = (customer: Customer): Customer => {
@@ -12,6 +11,5 @@ export const customerResolver = (customer: Customer): Customer => {
     name: customer.name,
     email: customer.email,
     created_at: customer.created_at,
-    updated_at: customer.updated_at || undefined,
   };
 };

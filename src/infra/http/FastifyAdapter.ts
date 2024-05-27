@@ -1,5 +1,5 @@
 import cors from '@fastify/cors';
-import FastifyMultipart from '@fastify-multipart';
+import FastifyMultipart from '@fastify/multipart';
 import fastify, {FastifyInstance, HTTPMethods} from 'fastify';
 import {AppConfig} from '../config/AppConfig';
 import {HttpError} from '../../presentation/http/errors';
@@ -14,8 +14,7 @@ export class FastifyAdapter implements HttpServer {
   constructor() {
     this.app = fastify();
     this.app.register(cors);
-    this.app.register(cors);
-    this.app.register(FastifyMultipart, { attachFieldsToBody: true })
+    this.app.register(FastifyMultipart, { attachFieldsToBody: true, limits: { files: 1 } })
     this.appConfig = new AppConfig();
   }
 

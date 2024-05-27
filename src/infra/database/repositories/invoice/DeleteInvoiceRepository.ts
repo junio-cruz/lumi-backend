@@ -1,8 +1,8 @@
 import {prisma} from '../../index';
 import {
-  DeleteInvoiceRepositoryInput,
-  DeleteInvoiceRepositoryOutput,
-  IDeleteInvoiceRepository,
+    DeleteInvoiceRepositoryInput,
+    DeleteInvoiceRepositoryOutput,
+    IDeleteInvoiceRepository,
 } from '../../../../domain/repositories/invoice/IDeleteInvoiceRepository';
 
 export class DeleteInvoiceRepository implements IDeleteInvoiceRepository {
@@ -10,10 +10,10 @@ export class DeleteInvoiceRepository implements IDeleteInvoiceRepository {
     input: DeleteInvoiceRepositoryInput,
   ): Promise<DeleteInvoiceRepositoryOutput> {
     const invoice_repository = prisma.use();
-    return await invoice_repository.findUnique({
+    return await invoice_repository.invoice.delete({
       where: {
         invoice_id: input.invoice_id,
       },
-    });
+    }) as DeleteInvoiceRepositoryOutput;
   }
 }

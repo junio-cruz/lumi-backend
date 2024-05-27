@@ -7,7 +7,6 @@ export type Invoice = {
   compensated_energy: number;
   public_contribution_ilum: number;
   created_at: Date;
-  updated_at?: Date;
 };
 
 export const invoiceResolver = (invoice: Invoice): Invoice => {
@@ -20,6 +19,5 @@ export const invoiceResolver = (invoice: Invoice): Invoice => {
     compensated_energy: invoice.compensated_energy,
     public_contribution_ilum: invoice.public_contribution_ilum,
     created_at: invoice.created_at,
-    updated_at: invoice.updated_at,
   };
 };

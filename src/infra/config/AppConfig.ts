@@ -1,20 +1,13 @@
 import dotenv from 'dotenv';
-import {
-  ConfigValue,
-  IAppConfig,
-} from '../../application/protocols/config/IAppConfig';
+import {ConfigValue, IAppConfig,} from '../../application/protocols/config/IAppConfig';
 
 dotenv.config({ path: `${__dirname}/../../../.env` });
 
 const ENVS = [
   'NODE_ENV',
   'LOG_LEVEL',
-  'MONGO_URL',
+  'POSTGRES_URL',
   'AWS_REGION',
-  'AWS_COGNITO_CLIENT_ID',
-  'AWS_COGNITO_USER_POOL_ID',
-  'PUBLIC_IMAGES_BUCKET_NAME',
-  'TOPIC_ARN',
 ];
 
 export class AppConfig implements IAppConfig {

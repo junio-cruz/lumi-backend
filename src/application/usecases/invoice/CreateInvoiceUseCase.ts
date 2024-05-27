@@ -43,7 +43,6 @@ export class CreateInvoiceUseCase implements ICreateInvoiceUseCase {
       compensated_energy: 0,
       public_contribution_ilum: 0,
       created_at: new Date(),
-      updated_at: new Date(),
     }
     const response = this.createInvoiceRepository.execute(createInvoiceRepository);
     this.logger.debug('update invoice repository response', response);

@@ -9,7 +9,6 @@ export type CreateInvoiceRepositoryInput = {
   compensated_energy: number;
   public_contribution_ilum: number;
   created_at: Date;
-  updated_at?: Date;
 };
 
 export type CreateInvoiceRepositoryOutput = Invoice;

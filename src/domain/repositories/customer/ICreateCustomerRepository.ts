@@ -1,9 +1,10 @@
-import { Customer } from '../../entities/Customer';
+import {Customer} from '../../entities/Customer';
 
 export type CreateCustomerRepositoryInput = {
   customer_id: string;
   name: string;
   email: string;
+  password: string;
 };
 
 export type CreateCustomerRepositoryOutput = Customer;

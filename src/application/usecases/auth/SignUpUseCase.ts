@@ -49,6 +49,7 @@ export class SignUpUseCase implements ISignUpUseCase {
         customer_id: this.guidGenerator.uuidV4(),
         email: input.email,
         name: input.name,
+        password: input.password
       };
       const customer = await this.createCustomerRepository.execute(
         createRepositoryInput,

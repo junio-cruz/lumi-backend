@@ -8,17 +8,20 @@ generator client {
 }
 
 model Invoice {
-  invoice_id               String @id
+  invoice_id               String   @id
   customer_id              String
   reference_month          String
   electric_energy          Int
   scee_energy              Int
   compensated_energy       Int
   public_contribution_ilum Int
+  created_at               DateTime
 }
 
 model Customer {
-  customer_id String @id
-  email       String @unique
+  customer_id String   @id
+  email       String   @unique
   name        String
+  password    String
+  created_at  DateTime
 }

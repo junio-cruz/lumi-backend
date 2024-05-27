@@ -3,7 +3,7 @@ import {HttpOkResponse, HttpResponse} from '../../http/response';
 import {HttpBadRequestError, HttpError} from '../../http/errors';
 import {IHttpController} from '../../../application/protocols/http/IHttp';
 import {IRequestValidator} from '../../../application/protocols/validator/IValidator';
-import {pageSizeValidatorSchema, pageValidatorSchema, uuidV4ValidatorSchema,} from '../../validatorSchemas/schemas';
+import {pageSizeValidatorSchema, pageValidatorSchema, uuidV4ValidatorSchema} from '../../validatorSchemas/schemas';
 import {IListInvoicesUseCase, ListInvoicesUseCase,} from '../../../application/usecases/invoice/ListInvoicesUseCase';
 
 import {Logger} from '../../../infra/logger/Logger';
@@ -28,7 +28,7 @@ export class ListInvoicesController implements IHttpController {
   }
 
   public async handle(request: HttpRequest): Promise<HttpResponse | HttpError> {
-    let { customer_id, page, page_size } =
+    const { customer_id, page, page_size } =
         request.query as RequestQueryParameters;
 
     const requestValidation = await this.requestValidator.validate(

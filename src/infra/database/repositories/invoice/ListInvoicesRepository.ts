@@ -21,10 +21,10 @@ export class ListInvoicesRepository implements IListInvoicesRepository {
     const pageSize = input.pagination?.page_size || 10;
     const invoice_repository = prisma.use();
     const [count, invoices] = await invoice_repository.$transaction([
-      invoice_repository.count({
+      invoice_repository.invoice.count({
         where: queryFilters,
       }),
-      invoice_repository.findMany({
+      invoice_repository.invoice.findMany({
         where: queryFilters,
         skip: (page - 1) * (pageSize || 0),
         take: pageSize || undefined,
