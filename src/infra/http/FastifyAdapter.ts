@@ -2,10 +2,10 @@ import cors from '@fastify/cors';
 import FastifyMultipart from '@fastify/multipart';
 import fastify, {FastifyInstance, HTTPMethods} from 'fastify';
 import {AppConfig} from '../config/AppConfig';
-import {HttpError} from '../../presentation/http/errors';
 import {HttpRequest} from '../../presentation/http/request';
+import {HttpResponse} from '../../presentation/http/response';
 import {IAppConfig} from '../../application/protocols/config/IAppConfig';
-import {HttpRequestContext, HttpServer, IHttpController,} from '../../application/protocols/http/IHttp';
+import {HttpServer, IHttpController,} from '../../application/protocols/http/IHttp';
 
 export class FastifyAdapter implements HttpServer {
   app: FastifyInstance;
@@ -26,32 +26,27 @@ export class FastifyAdapter implements HttpServer {
     this.app.route({
       method,
       url: path,
-      handler: async (request: any, reply: any) => {
-        const ctx: HttpRequestContext = {
-          status: 204,
-        };
+      handler: async (request, reply) => {
         const httpRequest: HttpRequest = {
           headers: request.headers || {},
           body: request.body || {},
           query: request.query || {},
           params: request.params || {},
         };
-        const controllerResponse = await controller.handle(httpRequest);
-        ctx.status = controllerResponse.statusCode;
-        if (controllerResponse instanceof HttpError) {
-          ctx.error = {
-            name: controllerResponse.name,
-            message: controllerResponse.message,
+        let controllerResponse = await controller.handle(httpRequest);
+        if (controllerResponse instanceof HttpResponse) {
+          controllerResponse as HttpResponse;
+          return controllerResponse.body;
+        }
+        reply.code(controllerResponse.statusCode);
+        return {
+          name: controllerResponse.name,
+              message: controllerResponse.message,
             code: controllerResponse.data,
             stack: this.appConfig.isLocal()
-              ? controllerResponse.stack
-              : undefined,
-          };
-        } else {
-          ctx.data = controllerResponse.body;
-        }
-        reply.code(ctx.status);
-        return ctx;
+            ? controllerResponse.stack
+            : undefined,
+        };
       },
     });
   }

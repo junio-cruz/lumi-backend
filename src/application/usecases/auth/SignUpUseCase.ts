@@ -1,6 +1,8 @@
 import {ILogger} from '../../protocols/logger/ILogger';
 import {Customer} from '../../../domain/entities/Customer';
 import {IAppConfig} from '../../protocols/config/IAppConfig';
+import {Encryptor} from "../../../infra/encryptor/encryptor";
+import {IEncryptor} from "../../protocols/encryptor/IEncryptor";
 import {IGuidGenerator} from '../../protocols/guid/IGuidGenerator';
 import {UUIDGuidGenerator} from '../../../infra/guidGenerator/UUIDGuidGenerator';
 import {
@@ -10,6 +12,7 @@ import {
 import {IGetCustomerRepository} from '../../../domain/repositories/customer/IGetCustomerRepository';
 import {GetCustomerRepository} from '../../../infra/database/repositories/customer/GetCustomerRepository';
 import {CreateCustomerRepository} from '../../../infra/database/repositories/customer/CreateCustomerRepository';
+
 
 export type SignUpUseCaseInput = {
   name: string;
@@ -27,6 +30,7 @@ export class SignUpUseCase implements ISignUpUseCase {
   constructor(
     private logger: ILogger,
     private appConfig: IAppConfig,
+    private encryptor: IEncryptor = new Encryptor(),
     private guidGenerator: IGuidGenerator = new UUIDGuidGenerator(),
     private getCustomerRepository: IGetCustomerRepository = new GetCustomerRepository(),
     private createCustomerRepository: ICreateCustomerRepository = new CreateCustomerRepository(),
@@ -45,11 +49,13 @@ export class SignUpUseCase implements ISignUpUseCase {
       if (customer_found) {
         throw new Error('CUSTOMER_ALREADY_EXISTS');
       }
+      const password = await this.encryptor.encrypt({ key: input.email, message: input.password })
       const createRepositoryInput: CreateCustomerRepositoryInput = {
         customer_id: this.guidGenerator.uuidV4(),
         email: input.email,
         name: input.name,
-        password: input.password
+        password,
+        created_at: new Date(),
       };
       const customer = await this.createCustomerRepository.execute(
         createRepositoryInput,

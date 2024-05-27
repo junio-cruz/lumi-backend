@@ -1,16 +1,22 @@
 import {HttpRequest} from '../../http/request';
 import {HttpOkResponse, HttpResponse} from '../../http/response';
-import {HttpBadRequestError, HttpError} from '../../http/errors';
+import {
+  HttpBadRequestError,
+  HttpError,
+  HttpInternalServerError,
+  HttpNotFoundError,
+  HttpUnauthorizedError
+} from '../../http/errors';
 import {IHttpController} from '../../../application/protocols/http/IHttp';
 import {IRequestValidator} from '../../../application/protocols/validator/IValidator';
-import {passwordValidatorSchema, uuidV4ValidatorSchema,} from '../../validatorSchemas/schemas';
+import {emailValidatorSchema, passwordValidatorSchema} from '../../validatorSchemas/schemas';
 
 import {Logger} from '../../../infra/logger/Logger';
 import {FastestValidator} from '../../../infra/validators/FastestValidator';
 import {ISignInUseCase, SignInUseCase} from '../../../application/usecases/auth/SignInUseCase';
 
 type RequestBodyParams = {
-  customer_id: string;
+  email: string;
   password: string;
 };
 
@@ -26,15 +32,15 @@ export class SignInUserController implements IHttpController {
   }
 
   public async handle(request: HttpRequest): Promise<HttpResponse | HttpError> {
-    const { customer_id, password } = request.body as RequestBodyParams;
+    const { email, password } = request.body as RequestBodyParams;
 
     const requestValidation = await this.requestValidator.validate(
       {
-        customer_id,
+        email,
         password,
       },
       {
-        customer_id: uuidV4ValidatorSchema({ optional: false }),
+        email: emailValidatorSchema({ optional: false }),
         password: passwordValidatorSchema({ optional: false }),
       },
     );
@@ -43,11 +49,26 @@ export class SignInUserController implements IHttpController {
       return new HttpBadRequestError(requestValidation.errors);
     }
 
-    const response = await this.signInUserUseCase.execute({
-      customer_id,
-      password,
-    });
-
-    return new HttpOkResponse(response);
+    try {
+      const response = await this.signInUserUseCase.execute({
+        email,
+        password,
+      });
+      return new HttpOkResponse(response);
+    } catch (error: any) {
+      if (
+          [
+            'CUSTOMER_NOT_AUTHORIZED',
+            'INVALID_PASSWORD',
+          ].includes(error.message)
+      ) {
+        return new HttpUnauthorizedError(error.message);
+      }
+      if (['CUSTOMER_NOT_FOUND'].includes(error.message)) {
+        return new HttpNotFoundError(error.message);
+      }
+      this.logger.error('Internal Server Error', error);
+      return new HttpInternalServerError(error as Error);
+    }
   }
 }

@@ -1,7 +1,7 @@
 import {HttpRequest} from '../../http/request';
 import {Logger} from '../../../infra/logger/Logger';
-import {HttpBadRequestError, HttpError,} from '../../http/errors';
-import {HttpCreatedResponse, HttpResponse} from '../../http/response';
+import {HttpBadRequestError, HttpConflictError, HttpError, HttpInternalServerError,} from '../../http/errors';
+import {HttpOkResponse, HttpResponse} from '../../http/response';
 import {IHttpController} from '../../../application/protocols/http/IHttp';
 import {IAppConfig} from '../../../application/protocols/config/IAppConfig';
 import {FastestValidator} from '../../../infra/validators/FastestValidator';
@@ -17,6 +17,7 @@ type RequestParams = {
 type RequestBodyParams = {
   file: File;
 };
+
 export class CreateInvoiceController implements IHttpController {
   constructor(
     private readonly logger: Logger,
@@ -49,11 +50,18 @@ export class CreateInvoiceController implements IHttpController {
       return new HttpBadRequestError(requestValidation.errors);
     }
 
-    const invoice = await this.createInvoiceUseCase.execute({
-      customer_id,
-      file,
-    });
-
-    return new HttpCreatedResponse(invoice);
+    try {
+      const response = await this.createInvoiceUseCase.execute({
+        customer_id,
+        file,
+      });
+      return new HttpOkResponse(response);
+    } catch (error: any) {
+      if (['INVOICE_ALREADY_EXISTS'].includes(error.message)) {
+        return new HttpConflictError(error.message);
+      }
+      this.logger.error('Internal Server Error', error);
+      return new HttpInternalServerError(error as Error);
+    }
   }
 }

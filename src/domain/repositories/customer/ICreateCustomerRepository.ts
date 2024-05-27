@@ -5,6 +5,7 @@ export type CreateCustomerRepositoryInput = {
   name: string;
   email: string;
   password: string;
+  created_at: Date;
 };
 
 export type CreateCustomerRepositoryOutput = Customer;

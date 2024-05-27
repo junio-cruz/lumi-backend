@@ -11,18 +11,20 @@
   },
   "dependencies": {
     "uuid": "^9.0.1",
-    "dotenv": "^16.4.5",
-    "fastify": "^4.27.0",
-    "fast-glob": "^3.3.2",
     "@fastify/aws-lambda": "^4.1.0",
     "@fastify/cors": "^9.0.1",
     "@fastify/multipart": "^8.2.0",
     "@prisma/client": "^5.14.0",
     "@sentry/serverless": "^7.114.0",
-    "fastest-validator": "^1.18.0"
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.4.5",
+    "fast-glob": "^3.3.2",
+    "fastest-validator": "^1.18.0",
+    "fastify": "^4.27.0"
   },
   "devDependencies": {
     "@sentry/esbuild-plugin": "^2.10.3",
+    "@types/crypto-js": "^4.2.2",
     "@types/jest": "^29.5.11",
     "@types/node": "^20.11.5",
     "@types/uuid": "^9.0.7",

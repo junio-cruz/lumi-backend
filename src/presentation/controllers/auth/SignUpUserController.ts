@@ -1,7 +1,7 @@
 import {HttpRequest} from '../../http/request';
 import {customerResolver,} from '../../../domain/entities/Customer';
 import {HttpOkResponse, HttpResponse} from '../../http/response';
-import {HttpBadRequestError, HttpError} from '../../http/errors';
+import {HttpBadRequestError, HttpConflictError, HttpError, HttpInternalServerError} from '../../http/errors';
 import {IHttpController} from '../../../application/protocols/http/IHttp';
 import {emailValidatorSchema, nameValidatorSchema, passwordValidatorSchema,} from '../../validatorSchemas/schemas';
 
@@ -51,12 +51,19 @@ export class SignUpController implements IHttpController {
       return new HttpBadRequestError(requestValidation.errors);
     }
 
-    const customer = await this.signUpCustomerUseCase.execute({
-      name,
-      email,
-      password,
-    });
-
-    return new HttpOkResponse(customerResolver(customer));
+    try {
+      const customer = await this.signUpCustomerUseCase.execute({
+        name,
+        email,
+        password,
+      });
+      return new HttpOkResponse(customerResolver(customer));
+    } catch (error: any) {
+      if (['CUSTOMER_ALREADY_EXISTS'].includes(error.message)) {
+        return new HttpConflictError(error.message);
+      }
+      this.logger.error('Internal Server Error', error);
+      return new HttpInternalServerError(error as Error);
+    }
   }
 }

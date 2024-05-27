@@ -7,7 +7,7 @@ export class HttpError extends Error {
     public readonly stack?: string,
     public readonly statusCode = 500,
   ) {
-    super(message);
+    super(message, data);
     this.name = 'HttpError';
     Object.setPrototypeOf(this, HttpError.prototype);
     Error.captureStackTrace(this, HttpError);
@@ -39,20 +39,6 @@ export class HttpConflictError extends HttpError {
     super(message, data, stack, statusCode);
     Object.setPrototypeOf(this, HttpConflictError.prototype);
     Error.captureStackTrace(this, HttpConflictError);
-  }
-}
-
-export class HttpForbiddenError extends HttpError {
-  constructor(
-    public readonly data = 'Authenticated user is not authorized',
-    public readonly stack?: string,
-    public readonly name = 'HttpForbiddenError',
-    public readonly message = 'FORBIDDEN',
-    public readonly statusCode = 403,
-  ) {
-    super(message, data, stack, statusCode);
-    Object.setPrototypeOf(this, HttpForbiddenError.prototype);
-    Error.captureStackTrace(this, HttpForbiddenError);
   }
 }
 

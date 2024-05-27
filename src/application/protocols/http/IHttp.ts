@@ -1,12 +1,6 @@
-import { HttpError } from '../../../presentation/http/errors';
-import { HttpRequest } from '../../../presentation/http/request';
-import { HttpResponse } from '../../../presentation/http/response';
-
-export type HttpRequestContext = {
-  status: number;
-  data?: any;
-  error?: any;
-};
+import {HttpError} from '../../../presentation/http/errors';
+import {HttpRequest} from '../../../presentation/http/request';
+import {HttpResponse} from '../../../presentation/http/response';
 
 export interface IHttpController {
   handle(request: HttpRequest): Promise<HttpResponse | HttpError>;

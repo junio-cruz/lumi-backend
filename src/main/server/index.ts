@@ -8,7 +8,6 @@ import {SignUpController} from '../../presentation/controllers/auth/SignUpUserCo
 import {SignInUserController} from '../../presentation/controllers/auth/SignInUserController';
 import {ListInvoicesController} from "../../presentation/controllers/invoice/ListInvoicesController";
 import {CreateInvoiceController} from "../../presentation/controllers/invoice/CreateInvoiceController";
-import {ControllerErrorHandlerDecorator} from '../../presentation/decorators/ControllerErrorHandlerDecorator';
 
 const server = new FastifyAdapter();
 
@@ -28,22 +27,22 @@ const listInvoicesController = new ListInvoicesController(logger);
 server.route(
   'post',
   '/auth/sign-up',
-  new ControllerErrorHandlerDecorator(logger, signUpController),
+  signUpController,
 );
 server.route(
   'post',
   '/auth/sign-in',
-  new ControllerErrorHandlerDecorator(logger, signInController),
+  signInController,
 );
 server.route(
   'post',
   '/invoice',
-  new ControllerErrorHandlerDecorator(logger, createInvoiceController),
+  createInvoiceController,
 );
 server.route(
   'get',
   '/invoices',
-  new ControllerErrorHandlerDecorator(logger, listInvoicesController),
+  listInvoicesController,
 );
 
 export const app = server;
