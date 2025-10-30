@@ -69,7 +69,7 @@ export class ListInvoicesController implements IHttpController {
     });
     return new HttpOkResponse({
       ...response,
-      page_result: response.page_data.map((invoice: Invoice) => invoiceResolver(invoice)),
+      page_data: response.page_data.map((invoice: Invoice) => invoiceResolver(invoice)),
     });
   }
 }
