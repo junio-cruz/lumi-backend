@@ -1,21 +1,16 @@
 import {HttpRequest} from '../../http/request';
 import {Logger} from '../../../infra/logger/Logger';
-import {HttpBadRequestError, HttpConflictError, HttpError, HttpInternalServerError,} from '../../http/errors';
 import {HttpOkResponse, HttpResponse} from '../../http/response';
 import {IHttpController} from '../../../application/protocols/http/IHttp';
 import {IAppConfig} from '../../../application/protocols/config/IAppConfig';
 import {FastestValidator} from '../../../infra/validators/FastestValidator';
 import {IRequestValidator} from '../../../application/protocols/validator/IValidator';
-import {fileValidatorSchema, uuidV4ValidatorSchema,} from '../../validatorSchemas/schemas';
-
-import {CreateInvoiceUseCase, ICreateInvoiceUseCase,} from '../../../application/usecases/invoice/CreateInvoiceUseCase';
+import {fileValidatorSchema, uuidV4ValidatorSchema} from '../../validatorSchemas/schemas';
+import {HttpBadRequestError, HttpConflictError, HttpError, HttpInternalServerError} from '../../http/errors';
+import {CreateInvoiceUseCase, ICreateInvoiceUseCase} from '../../../application/usecases/invoice/CreateInvoiceUseCase';
 
 type RequestParams = {
   customer_id: string;
-};
-
-type RequestBodyParams = {
-  file: File;
 };
 
 export class CreateInvoiceController implements IHttpController {
@@ -32,9 +27,9 @@ export class CreateInvoiceController implements IHttpController {
   }
 
   public async handle(request: HttpRequest): Promise<HttpResponse | HttpError> {
-    const { customer_id } = request.params as RequestParams;
-    const { file } = request.body as RequestBodyParams;
-
+    const { customer_id } = request.headers as RequestParams;
+    // @ts-ignore
+    const { '': file } = request.body;
     const requestValidation = await this.requestValidator.validate(
       {
         customer_id,

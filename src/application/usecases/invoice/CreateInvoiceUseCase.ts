@@ -11,7 +11,7 @@ import {CreateInvoiceRepository} from '../../../infra/database/repositories/invo
 
 export type CreateInvoiceUseCaseInput = {
   customer_id: string;
-  file: File;
+  file: any;
 };
 
 export type CreateInvoiceUseCaseOutput = Invoice;
@@ -33,7 +33,7 @@ export class CreateInvoiceUseCase implements ICreateInvoiceUseCase {
   async execute(
     input: CreateInvoiceUseCaseInput,
   ): Promise<CreateInvoiceUseCaseOutput> {
-    this.logger.debug('execute input', JSON.stringify(input));
+    this.logger.debug('execute input', input);
     const createInvoiceRepository: CreateInvoiceRepositoryInput = {
       customer_id: input.customer_id,
       invoice_id: this.guidGenerator.uuidV4(),

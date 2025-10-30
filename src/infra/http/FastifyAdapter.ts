@@ -12,9 +12,15 @@ export class FastifyAdapter implements HttpServer {
   readonly appConfig: IAppConfig;
 
   constructor() {
-    this.app = fastify();
+    this.app = fastify({
+      bodyLimit: 52428800
+    });
     this.app.register(cors);
-    this.app.register(FastifyMultipart, { attachFieldsToBody: true, limits: { files: 1 } })
+    this.app.register(FastifyMultipart, {
+      limits: { files: 1 },
+      attachFieldsToBody: true,
+      throwFileSizeLimit: false
+    });
     this.appConfig = new AppConfig();
   }
 

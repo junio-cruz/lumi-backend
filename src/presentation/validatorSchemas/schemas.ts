@@ -37,8 +37,13 @@ export const pageSizeValidatorSchema = ({ optional = false }) => ({
 });
 
 export const fileValidatorSchema = ({ optional = false }) => ({
-  type: 'any',
-  optional,
+  type : "object" ,
+  minProps : 3 ,
+  props : {
+    type: {type: "string" },
+    filename: {type: "string"},
+    mimetype: {type: "string"}
+  }
 });
 
 export const stringValidatorSchema = ({ optional = false }) => ({
